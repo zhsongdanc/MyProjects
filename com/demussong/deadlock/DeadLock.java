@@ -32,6 +32,9 @@ public class DeadLock {
 
 class Account{
     private int balance;
+    private int id;
+    private Allocator allocator;
+    public Account(){}
 
     // 没加锁，如果两个人给相同一个人转账会有问题
     void wrongTransfer(Account to, int count) {
@@ -52,32 +55,82 @@ class Account{
     }
 
 
-    void transferByAllocateAll(Account to, int count) {
-        synchronized (this) {
-            synchronized (to) {
-                assert balance >= count;
-                this.balance-=count;
-                to.balance+=count;
-            }
-        }
+    public Account(Allocator allocator) {
+        this.allocator = allocator;
     }
+    // solve method1: 一次性申请所有资源
+    void transferSolve1(Account to, int count) {
 
+        while (allocator.apply(this, to));
+        try{
+            // 申请时的加锁是为了保证顺序申请，这里需要锁定账户保证原子性
+            synchronized (this) {
+                synchronized (to) {
+                    assert balance >= count;
+                    this.balance-=count;
+                    to.balance+=count;
+                }
+            }
+        }finally {
+            allocator.remove(this, to);
+        }
 
+    }
     static class Allocator{
 
 
         private Allocator(){}
 
-        private
-        private List<Object> locks = new ArrayList<>();
+        private static Allocator allocator = new Allocator();
+
+        private List<Account> locks = new ArrayList<>();
 
         public Allocator getInstance() {
-            return
+            return allocator;
         }
 
-        private boolean apply(Object from, Object to) {
+        private boolean apply(Account from, Account to) {
 
+            synchronized (this) {
+                if (locks.contains(from) || locks.contains(to)) {
+                    return false;
+                }
+                locks.add(from);
+                locks.add(to);
+                return true;
+            }
+
+
+        }
+
+        // 一个线程如果持有锁，但其他没持有锁的线程却删了锁，这就很奇怪。所以这里也加锁
+        private synchronized void remove(Account from, Account to) {
+            locks.remove(from);
+            locks.remove(to);
         }
     }
+
+    // method2: 按序申请
+    void transferSolve2(Account to, int count) {
+
+        Account small = this;
+        Account big = to;
+        if (small.id > big.id) {
+            Account tmp = small;
+            small = big;
+            big = tmp;
+        }
+
+        synchronized (small) {
+            synchronized (big) {
+                assert balance >= count;
+                this.balance-=count;
+                to.balance+=count;
+            }
+        }
+
+    }
+
+
 
 }
