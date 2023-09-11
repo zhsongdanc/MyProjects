@@ -12,7 +12,8 @@ public class MatcherTest {
 
     public static void main(String[] args) {
 //        test1();
-        spaceTest();
+//        spaceTest();
+        test3();
     }
 
     static void test1() {
@@ -38,6 +39,17 @@ public class MatcherTest {
         System.out.println(matcher.group(0).length());
 //        System.out.println(matcher.group(1));
 //        System.out.println(matcher.matches());
+    }
+
+
+    static void test3() {
+        String input = "hello\n2023";
+        String input2 = "hello-\n2023";
+
+        String pattern = "hello[-\\n]\\d{4}";
+        System.out.println(input.matches(pattern));
+        System.out.println(input2.matches(pattern));
+        System.out.println(input.indexOf('2'));
     }
 
 }

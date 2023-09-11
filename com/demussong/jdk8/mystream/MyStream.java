@@ -15,6 +15,6 @@ public class MyStream {
 //
 //        main
 public static void main(String[] args) {
-    Collectors.toList()
+//    Collectors.toList()
 }
 }

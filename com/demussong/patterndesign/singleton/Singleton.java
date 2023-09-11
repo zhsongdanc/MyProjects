@@ -1,4 +1,4 @@
-package com.demussong.pattern.singleton;
+package com.demussong.patterndesign.singleton;
 
 /**
  * @author demussong
