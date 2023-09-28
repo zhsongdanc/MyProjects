@@ -4,7 +4,7 @@ import java.util.function.BinaryOperator;
 
 /*
  * @Author: demussong
- * @Description:
+ * @Description: 测试invokedynamic指令
  * @Date: 2023/9/21 16:57
  */
 public class InvokeDynamicTest {
