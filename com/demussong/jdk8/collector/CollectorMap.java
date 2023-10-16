@@ -2,8 +2,11 @@ package com.demussong.jdk8.collector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 /*
@@ -15,14 +18,15 @@ public class CollectorMap {
 
     // https://blog.csdn.net/stone_yw/article/details/87297937
     public static void main(String[] args) {
-        Student h1 = new Student("h1", 20);
-        Student h2 = new Student("h2", 21);
-        Student h3 = new Student("h2", 22);
-        Student h4 = new Student("h4", 21);
-        List<Student> list = Arrays.asList(h1,h2,h3,h4);
-        solve3(list);
+//        Student h1 = new Student("h1", 20);
+//        Student h2 = new Student("h2", 21);
+//        Student h3 = new Student("h2", 22);
+//        Student h4 = new Student("h4", 21);
+//        List<Student> list = Arrays.asList(h1,h2,h3,h4);
+//        solve3(list);
 
 
+        groupByTest();
     }
 
     static void solve1(List<Student> list) {
@@ -57,7 +61,54 @@ public class CollectorMap {
     }
 
 
+    static void groupByTest() {
+        List<Student> list = new ArrayList<>();
+        list.add(new Student("demus", 13));
+        list.add(new Student("demus", 12));
+        list.add(new Student("sss", 13));
+        list.add(new Student("sss", 15));
+        list.add(new Student("sss", 14));
 
+
+
+
+
+
+
+
+        Map<String, IntSummaryStatistics> map = list.stream()
+                .collect(Collectors.groupingBy(stu -> build(stu), Collectors.summarizingInt(Student::getAge)));
+        for (Entry<String, IntSummaryStatistics> entry : map.entrySet()) {
+            String key = entry.getKey();
+            IntSummaryStatistics value = entry.getValue();
+            System.out.println(key);
+            System.out.println("max:" + value.getMax());
+            System.out.println("min:" + value.getMin());
+            System.out.println("count:" + value.getCount());
+            System.out.println("ave:" + value.getAverage());
+            System.out.println("sum:" + value.getSum());
+        }
+
+        Map<String, List<Integer>> valInfoMap = new HashMap<>();
+        valInfoMap.put("sss", Arrays.asList(4));
+        valInfoMap.put("demus", Arrays.asList(4,5,1));
+
+
+
+
+        Map<String, List<List<Integer>>> valInfoMap2 = list.stream().collect(Collectors.groupingBy(Student::getName
+                , Collectors.mapping(stu -> valInfoMap.get(stu.getName()), Collectors.toList())));
+
+        Map<String, List<Student>> collect = list.stream()
+                .collect(Collectors.groupingBy(Student::getName, Collectors.toList()));
+
+
+
+    }
+
+    static String build(Student student) {
+        return student.getName();
+    }
 
 
     static class Student{
