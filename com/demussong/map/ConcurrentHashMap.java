@@ -745,15 +745,19 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V>
             concurrencyLevel = MAX_SEGMENTS;
         // Find power-of-two sizes best matching arguments
         int sshift = 0;
+        // segmentSize
         int ssize = 1;
         while (ssize < concurrencyLevel) {
             ++sshift;
             ssize <<= 1;
         }
+        // 28
         this.segmentShift = 32 - sshift;
+        // 15
         this.segmentMask = ssize - 1;
         if (initialCapacity > MAXIMUM_CAPACITY)
             initialCapacity = MAXIMUM_CAPACITY;
+        // c 每个segment多少元素
         int c = initialCapacity / ssize;
         if (c * ssize < initialCapacity)
             ++c;
@@ -765,6 +769,7 @@ public class ConcurrentHashMap<K, V> extends AbstractMap<K, V>
                 new Segment<K,V>(loadFactor, (int)(cap * loadFactor),
                         (HashEntry<K,V>[])new HashEntry[cap]);
         Segment<K,V>[] ss = (Segment<K,V>[])new Segment[ssize];
+        // todo 这个unsafe类的用法
         UNSAFE.putOrderedObject(ss, SBASE, s0); // ordered write of segments[0]
         this.segments = ss;
     }
