@@ -69,13 +69,6 @@ public class CollectorMap {
         list.add(new Student("sss", 15));
         list.add(new Student("sss", 14));
 
-
-
-
-
-
-
-
         Map<String, IntSummaryStatistics> map = list.stream()
                 .collect(Collectors.groupingBy(stu -> build(stu), Collectors.summarizingInt(Student::getAge)));
         for (Entry<String, IntSummaryStatistics> entry : map.entrySet()) {
@@ -93,18 +86,28 @@ public class CollectorMap {
         valInfoMap.put("sss", Arrays.asList(4));
         valInfoMap.put("demus", Arrays.asList(4,5,1));
 
-
-
-
         Map<String, List<List<Integer>>> valInfoMap2 = list.stream().collect(Collectors.groupingBy(Student::getName
                 , Collectors.mapping(stu -> valInfoMap.get(stu.getName()), Collectors.toList())));
 
         Map<String, List<Student>> collect = list.stream()
                 .collect(Collectors.groupingBy(Student::getName, Collectors.toList()));
+    }
 
+    static void partitionTest() {
 
+        List<Student> list = new ArrayList<>();
+        list.add(new Student("demus", 13));
+        list.add(new Student("demus", 12));
+        list.add(new Student("sss", 13));
+        list.add(new Student("sss", 15));
+        list.add(new Student("sss", 14));
+
+        Map<Boolean, List<Student>> collect = list.stream()
+                .collect(Collectors.partitioningBy(item -> item.getAge() >= 13));
 
     }
+
+
 
     static String build(Student student) {
         return student.getName();

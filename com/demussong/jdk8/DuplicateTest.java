@@ -23,6 +23,34 @@ public class DuplicateTest {
                 );
         System.out.println(distinctLiost.toString());
     }
+
+
+    // 这样写更清楚
+    static void test() {
+
+        BookInfoVo bookInfoVo = new BookInfoVo("a","b");
+        String name = bookInfoVo.getName();
+
+        // 其他业务逻辑
+        StringBuilder builder = new StringBuilder();
+        builder.append("fwe");
+
+        // 需要使用name
+        System.out.println(name);
+    }
+    // 避免这样写
+    static void test2() {
+
+        BookInfoVo bookInfoVo = new BookInfoVo("a","b");
+
+        // 其他业务逻辑
+        StringBuilder builder = new StringBuilder();
+        builder.append("fwe");
+
+        // 需要使用name
+        String name = bookInfoVo.getName();
+        System.out.println(name);
+    }
 }
 class BookInfoVo{
 
