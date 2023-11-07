@@ -771,14 +771,20 @@ enum StreamOpFlag {
         // SORTED，有一个Map,存储一些标志位，  set = SET_BITS<<1
 
 
-        String set = Integer.toBinaryString(StreamOpFlag.DISTINCT.set);
-        System.out.println(set);
-
-
-        System.out.println(Integer.toBinaryString(getMask(7)));
-        System.out.println(Integer.toBinaryString(getMask(8)));
-        System.out.println(Integer.toBinaryString(getMask(1)));
-        System.out.println(Integer.toBinaryString(getMask(0)));
+//        String set = Integer.toBinaryString(StreamOpFlag.DISTINCT.set);
+//        System.out.println(set);
+//
+//
+//        System.out.println(Integer.toBinaryString(getMask(7)));
+//        System.out.println(Integer.toBinaryString(getMask(8)));
+//        System.out.println(Integer.toBinaryString(getMask(1)));
+//        System.out.println(Integer.toBinaryString(getMask(0)));
+        int left = ORDERED.set | DISTINCT.set;
+        int right = SIZED.clear | SORTED.clear;
+        System.out.println("left:" + Integer.toBinaryString(left));
+        System.out.println("right:" + Integer.toBinaryString(right));
+        System.out.println("right mask:" + Integer.toBinaryString(getMask(right)));
+        System.out.println("combine:" + Integer.toBinaryString(combineOpFlags(right, left)));
 
     }
 }
