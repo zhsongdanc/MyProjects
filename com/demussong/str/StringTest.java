@@ -7,6 +7,7 @@ package com.demussong.str;
  */
 public class StringTest {
 	public static void main(String[] args) {
+		format();
 		formatTest();
 	}
 
@@ -32,5 +33,10 @@ public class StringTest {
 
 		String format2 = String.format("%s%s", "a", "b");
 		System.out.println(format2);
+	}
+
+	static void format() {
+		String format = String.format("wef=%s", true);
+		System.out.println(format);
 	}
 }
